@@ -1,0 +1,77 @@
+WebForm1.aspx.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication20
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            if(MultiView1.ActiveViewIndex >= 2)
+            {
+                MultiView1.ActiveViewIndex = 0;
+            }
+            else
+            {
+                MultiView1.ActiveViewIndex += 1;
+            }
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            if(MultiView1.ActiveViewIndex ==0)
+            {
+                MultiView1.ActiveViewIndex = 2;
+            }
+            else
+            {
+                MultiView1.ActiveViewIndex -= 1;
+            }
+        }
+    }
+}
+
+
+WebForm1.aspx:
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="WebApplication20.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:MultiView ID="MultiView1" runat="server" ActiveViewIndex="0">
+                <asp:View ID="View1" runat="server">
+                    <asp:Image ID="Image1" runat="server" Height="200px" ImageUrl="~/image/itachi.jpg" Width="450px" style="margin-left: 183px" />
+                </asp:View>
+                <asp:View ID="View2" runat="server">
+                    <asp:Image ID="Image2" runat="server" Height="200px" ImageUrl="~/image/kakashi.jpg" Width="450px" style="margin-left: 182px" />
+                </asp:View>
+                <asp:View ID="View3" runat="server">
+                    <asp:Image ID="Image3" runat="server" Height="200px" ImageUrl="~/image/minatonar.jpg" Width="450px" style="margin-left: 179px" />
+                </asp:View>
+            </asp:MultiView><br />
+            <asp:Button ID="Button1" runat="server" Text="Previous" style="margin-left: 46px" Width="320px" OnClick="Button1_Click" />
+            <asp:Button ID="Button2" runat="server" Text="Next" OnClick="Button2_Click" style="margin-left: 125px" Width="298px" />
+            <br />
+        </div>
+    </form>
+</body>
+</html>
