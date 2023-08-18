@@ -1,0 +1,295 @@
+Login.aspx:
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="WebApplication24.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            Username: <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox><br />
+            Password: <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox><br /><br />
+            <asp:Button ID="Button1" runat="server" Text="Login" OnClick="Button1_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+Login.aspx.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication24
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            Response.Write("Total Visitors" + Application["count"]);
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Session["user"] = TextBox1.Text;
+            Session["pswd"] = TextBox2.Text;
+            Response.Redirect("Enroll.aspx");
+        }
+    }
+}
+
+
+Enroll.aspx:
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Enroll.aspx.cs" Inherits="WebApplication24.Enroll" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label><br /><br />
+            Name: <asp:TextBox ID="TextBox1" runat="server" OnTextChanged="TextBox1_TextChanged"></asp:TextBox><br />
+            Course: <asp:TextBox ID="TextBox2" runat="server" OnTextChanged="TextBox2_TextChanged"></asp:TextBox><br /><br />
+            <asp:Button ID="Button1" runat="server" Text="Next" OnClick="Button1_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+Enroll.aspx.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication24
+{
+    public partial class Enroll : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if(Session["user"]!=null)
+            {
+                Label1.Text = "Welcome" + Session["user"];
+            }
+            else
+            {
+                Response.Redirect("WebForm1.aspx");
+            }
+        }
+
+        protected void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void TextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Session["nam"] = TextBox1.Text;
+            Session["cour"] = TextBox2.Text;
+            Response.Redirect("Display.aspx");
+        }
+    }
+}
+
+
+
+Display.aspx:
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Display.aspx.cs" Inherits="WebApplication24.Display" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label><br /><br />
+            <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label><br />
+            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label><br /><br />
+            <asp:Button ID="Button1" runat="server" Text="BACK" OnClick="Button1_Click" />
+            <asp:Button ID="Button2" runat="server" Text="LOGOUT" OnClick="Button2_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+Display.aspx.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication24
+{
+    public partial class Display : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if(Session["user"]!=null)
+            {
+                Label1.Text = "Welcome" + Session["user"];
+                Label2.Text = "Name: " + Session["nam"];
+                Label3.Text = "Course: " + Session["cour"];
+            }
+            else
+            {
+                Response.Redirect("WebForm1.aspx");
+            }
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Logout.aspx");
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Enroll.aspx");
+        }
+    }
+}
+
+
+Logout.aspx.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication24
+{
+    public partial class Logout : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if(Session["user"]!=null)
+            {
+                Session.Abandon();
+                Response.Redirect("WebForm1.aspx");
+            }
+            else
+            {
+                Response.Redirect("WebForm1.aspx");
+            }
+        }
+    }
+}
+
+
+
+Web.config:
+
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  https://go.microsoft.com/fwlink/?LinkId=169433
+  -->
+<configuration>
+  <system.web>
+	  <sessionState timeout="1"></sessionState>
+    <compilation debug="true" targetFramework="4.7.2" />
+    <httpRuntime targetFramework="4.7.2" />
+  </system.web>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701" />
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" />
+    </compilers>
+  </system.codedom>
+</configuration>
+
+
+
+Global.asax.cs:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.SessionState;
+
+namespace WebApplication24
+{
+    public class Global : System.Web.HttpApplication
+    {
+
+        protected void Application_Start(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            if(Application["count"]!=null)
+            {
+                Application["count"] = Convert.ToInt32(Application["count"].ToString()) + 1;
+            }
+            else
+            {
+                Application["count"] = 1;
+            }
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Session_End(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Application_End(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
